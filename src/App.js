@@ -1,5 +1,6 @@
 import "./styles.css";
 import React from "react";
+import { v4 as uuidv4 } from "uuid";
 
 class App extends React.Component {
   constructor(props) {
@@ -12,12 +13,30 @@ class App extends React.Component {
 
     this.addItem = this.addItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
   }
 
   handleChange(event) {
     const value = event.target.value;
     this.setState({
       newItem: value
+    });
+  }
+
+  handleCheckboxChange(id) {
+    // code to update checkbox based on ID
+    this.setState((prevState) => {
+      const { items } = prevState;
+      let updatedItems = [...items];
+      const indexToUpdate = updatedItems.findIndex((item) => item.id === id);
+      updatedItems[indexToUpdate] = {
+        ...updatedItems[indexToUpdate],
+        isChecked: !updatedItems[indexToUpdate].isChecked
+      };
+      return {
+        ...prevState,
+        items: updatedItems
+      };
     });
   }
 
@@ -33,6 +52,7 @@ class App extends React.Component {
           let itemsCopy = [...previousState.items];
           // add new item
           itemsCopy.push({
+            id: uuidv4(),
             label: previousState.newItem,
             imageURL: response.url,
             isChecked: false
@@ -72,23 +92,42 @@ class App extends React.Component {
 
           {this.state.items.map((item, index) => {
             return (
-              // need to have a key so that VDOM knows what to re-render
-              <div key={`item-${index}`} className="row">
-                <div className="col-md-3">
-                  <input id={1} type="checkbox" />
-                </div>
-                <div className="col-md-3">
-                  <img src={item.imageURL} alt="Logo" />
-                </div>
-                <div className="col-md-3">
-                  <label htmlFor={1}>{item.label}</label>
-                </div>
-                <div className="col-md-3">
-                  <i className="bi bi-x-circle"></i>
-                </div>
-              </div>
+              <ItemComponent
+                label={item.label}
+                imageURL={item.imageURL}
+                key={`item-${index}`}
+                isChecked={item.isChecked}
+                handleChange={this.handleCheckboxChange}
+                id={item.id}
+              />
             );
           })}
+        </div>
+      </div>
+    );
+  }
+}
+
+class ItemComponent extends React.Component {
+  render() {
+    return (
+      // need to have a key so that VDOM knows what to re-render
+      <div className="row">
+        <div className="col-md-3">
+          <input
+            type="checkbox"
+            checked={this.props.isChecked}
+            onChange={(event) => this.props.handleChange(this.props.id)}
+          />
+        </div>
+        <div className="col-md-3">
+          <img src={this.props.imageURL} alt="Logo" />
+        </div>
+        <div className="col-md-3">
+          <label>{this.props.label}</label>
+        </div>
+        <div className="col-md-3">
+          <i className="bi bi-x-circle"></i>
         </div>
       </div>
     );
