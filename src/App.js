@@ -89,21 +89,6 @@ class App extends React.Component {
               </div>
             );
           })}
-
-          {/* <div class="row">
-            <div class="col-md-3">
-              <input id={1} type="checkbox" />
-            </div>
-            <div class="col-md-3">
-              <img src={"https://picsum.photos/50"} alt="Logo" />
-            </div>
-            <div class="col-md-3">
-              <label htmlFor={1}>Label</label>
-            </div>
-            <div class="col-md-3">
-              <i class="bi bi-x-circle"></i>
-            </div>
-          </div> */}
         </div>
       </div>
     );
