@@ -17,11 +17,12 @@ class App extends React.Component {
   handleChange(event) {
     const value = event.target.value;
     this.setState({
-      newItem: event.target.value
+      newItem: value
     });
   }
 
   addItem() {
+    // fetch picture
     fetch("https://picsum.photos/50")
       .then((response) => {
         // do something with the response
