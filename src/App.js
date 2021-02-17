@@ -104,7 +104,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className=" App container">
         <h1>To-Do</h1>
 
         <div className="grid">
