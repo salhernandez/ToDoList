@@ -1,20 +1,26 @@
 import "./styles.css";
 import React from "react";
 import { v4 as uuidv4 } from "uuid";
+import { removeItem } from "./utilities";
+import ItemComponent from "./ItemComponent";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
+    // starting values
     this.state = {
       newItem: "",
       items: []
     };
 
+    // bounded functions
     this.addItem = this.addItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-    this.removeItem = this.removeItem.bind(this);
+
+    // utilities
+    this.removeItem = removeItem.bind(this);
   }
 
   handleChange(event) {
@@ -41,17 +47,6 @@ class App extends React.Component {
     });
   }
 
-  removeItem(idToDelete) {
-    this.setState((prevState) => {
-      const { items } = prevState;
-      const filteredItems = items.filter((item) => item.id !== idToDelete);
-      return {
-        ...prevState,
-        items: filteredItems
-      };
-    });
-  }
-
   addItem() {
     // fetch picture
     fetch("https://picsum.photos/50")
@@ -62,6 +57,7 @@ class App extends React.Component {
         this.setState((previousState) => {
           // make a copy of the data
           let itemsCopy = [...previousState.items];
+
           // add new item
           itemsCopy.push({
             id: uuidv4(),
@@ -82,26 +78,40 @@ class App extends React.Component {
       });
   }
 
+  showAddTask() {
+    // contains JSX
+    var showAddButton = (
+      <div className="col">
+        <button onClick={this.addItem}>Add Item</button>
+      </div>
+    );
+
+    return (
+      <div className="row">
+        <div className="col" />
+        <div className="col-6">
+          <input
+            type="text"
+            value={this.state.newItem}
+            onChange={this.handleChange}
+          />
+        </div>
+        {/* add button as a variable */}
+        {showAddButton}
+      </div>
+    );
+  }
+
   render() {
     return (
-      <div className="App container">
+      <div className="container">
         <h1>To-Do</h1>
 
         <div className="grid">
-          <div className="row">
-            <div className="col" />
-            <div className="col-6">
-              <input
-                type="text"
-                value={this.state.newItem}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="col">
-              <button onClick={this.addItem}>Add Item</button>
-            </div>
-          </div>
+          {/* first row */}
+          {this.showAddTask()}
 
+          {/* generate rows based on array contents */}
           {this.state.items.map((item, index) => {
             return (
               <ItemComponent
@@ -115,34 +125,6 @@ class App extends React.Component {
               />
             );
           })}
-        </div>
-      </div>
-    );
-  }
-}
-
-class ItemComponent extends React.Component {
-  render() {
-    return (
-      // need to have a key so that VDOM knows what to re-render
-      <div className="row">
-        <div className="col-md-3">
-          <input
-            type="checkbox"
-            checked={this.props.isChecked}
-            onChange={(event) => this.props.handleChange(this.props.id)}
-          />
-        </div>
-        <div className="col-md-3">
-          <img src={this.props.imageURL} alt="Logo" />
-        </div>
-        <div className="col-md-3">
-          <label>{this.props.label}</label>
-        </div>
-        <div className="col-md-3">
-          <span onClick={() => this.props.removeItem(this.props.id)}>
-            <i className="bi bi-x-circle" />
-          </span>
         </div>
       </div>
     );
