@@ -94,6 +94,7 @@ class App extends React.Component {
         <div className="col-6">
           <input
             type="text"
+            placeholder="New To-Do"
             value={this.state.newItem}
             onChange={this.handleChange}
           />
