@@ -82,7 +82,9 @@ class App extends React.Component {
     // contains JSX
     var showAddButton = (
       <div className="col">
-        <button onClick={this.addItem}>Add Item</button>
+        <button className="btn btn-primary" onClick={this.addItem}>
+          Add Item
+        </button>
       </div>
     );
 
@@ -104,7 +106,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className=" App container">
+      <div className="App container">
         <h1>To-Do</h1>
 
         <div className="grid">
