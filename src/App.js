@@ -14,6 +14,7 @@ class App extends React.Component {
     this.addItem = this.addItem.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.removeItem = this.removeItem.bind(this);
   }
 
   handleChange(event) {
@@ -36,6 +37,17 @@ class App extends React.Component {
       return {
         ...prevState,
         items: updatedItems
+      };
+    });
+  }
+
+  removeItem(idToDelete) {
+    this.setState((prevState) => {
+      const { items } = prevState;
+      const filteredItems = items.filter((item) => item.id !== idToDelete);
+      return {
+        ...prevState,
+        items: filteredItems
       };
     });
   }
@@ -98,6 +110,7 @@ class App extends React.Component {
                 key={`item-${index}`}
                 isChecked={item.isChecked}
                 handleChange={this.handleCheckboxChange}
+                removeItem={this.removeItem}
                 id={item.id}
               />
             );
@@ -127,7 +140,9 @@ class ItemComponent extends React.Component {
           <label>{this.props.label}</label>
         </div>
         <div className="col-md-3">
-          <i className="bi bi-x-circle"></i>
+          <span onClick={() => this.props.removeItem(this.props.id)}>
+            <i className="bi bi-x-circle" />
+          </span>
         </div>
       </div>
     );
